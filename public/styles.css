@@ -1,0 +1,159 @@
+:root {
+    --primary: #E94F37;
+}
+
+
+/* Structure */
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #F6F7EB;
+}
+
+.thing {
+    padding: 10px;
+    margin: 10px;
+    background: #F6F7EB;
+    border-radius: 5px;
+    border: 7px solid var(--primary);
+}
+
+.thing img {
+    max-width: 90%;
+    display: block;
+    margin: auto;
+}
+
+#thing-details-column {
+    padding: 10px;
+    margin: 10px;
+    background: #F6F7EB;
+    border-radius: 5px;
+    border: 7px solid var(--primary);
+}
+
+#add-link {
+    font-size: 1.5em;
+    padding: 5px;
+    border-radius: 5px;
+    border: 3px solid var(--primary);
+}
+
+#edit-link {
+    float: right;
+    margin-right: 10px;
+}
+
+#delete-link {
+    float: right;
+}
+
+#add-edit-thing-container {
+    padding: 10px;
+    margin: 10px;
+    background: #F6F7EB;
+    border-radius: 5px;
+    border: 7px solid var(--primary);
+}
+
+section,
+#thing-details-column {
+    transition: transform 0.3s, z-index 0s, box-shadow 0.3s;
+    z-index: 1;
+}
+
+section:hover,
+#thing-details-column:hover {
+    transform: scale(1.009);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+
+/* Form */
+
+label {
+    display: block;
+}
+
+.inline {
+    display: inline;
+}
+
+#things-p input {
+    margin-top: 5px;
+}
+
+#add-thing {
+    color: #E94F37;
+    font-size: 0.75em;
+    text-align: right;
+}
+
+
+/* The Close Button */
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 0px 5px;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* Typography */
+
+#main-nav-items {
+    font-size: 1.2em;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2,
+a {
+    color: #393E41;
+}
+
+h1 {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.transparent {
+    opacity: 0;
+}
+
+
+/* Larger Resolutions */
+
+@media (min-width: 600px) {
+    .columns {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+   
+    .thing {
+        flex: 25%;
+        flex-grow: 0;
+    }
+
+    #add-edit-recipe-container {
+        max-width: 30%;
+        margin: auto;
+    }
+}

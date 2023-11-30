@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="script.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <h1>Things That Have Nothing to do With Each Other</h1>
+        </header>
+
+        <div class="columns two-columns">
+            <a href="#" id="add-link">Add Thing</a>
+            <div id="thing-list" class="columns"></div>
+            <div id="thing-details-column">
+                <h2>Details</h2>
+
+                <div id="thing-details"></div>
+            </div>
+        </div>
+        <div id="add-edit-thing-container" class="dialog transparent">
+            <span class="close">&times;</span>
+
+            <h3 id="add-edit-title">Thing</h3>
+            <form id="add-edit-thing-form" method="post">
+                <input type="hidden" name="_id" value="-1" />
+                <p>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </p>
+                <p>
+                    <label for="inventor ">Inventor:</label>
+                    <input type="text" id="inventor" name="inventor" required />
+                </p>
+                <p>
+                    <label for="inventionDate">Invention Date:</label>
+                    <input type="text" id="inventionDate" name="inventionDate" required>
+                </p>
+                <p>
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" name="description" required />
+                </p>
+
+                <p>
+                    <label for="img">Upload Image:</label>
+                    <input type="file" id="img" name="img" />
+                </p>
+
+                <p id="facts-p ">
+                    <label class="inline">Fun Facts:</label>
+                    <a href="#" id="add-facts">Add Fun Fact</a>
+                    <section id="facts-boxes"></section>
+                </p>
+                <p>
+                    <button type="submit">Submit</button>
+                </p>
+            </form>
+        </div>
+    </body>
+</html>
