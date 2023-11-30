@@ -29,12 +29,8 @@ const thingSchema = new mongoose.Schema({
 
 const Thing = mongoose.model("Thing", thingSchema);
 
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
-});
-
 app.get("/api/things", (req, res) => {
-    res.send(things);
+    getThings(res);
 });
 
 const getThings = async (res) => {
@@ -51,7 +47,6 @@ app.post("/api/things", upload.single("img"), (req, res) => {
     }
 
     const thing = {
-        _id: things.length + 1,
         name: req.body.name,
         inventor: req.body.inventor,
         inventionDate: req.body.inventionDate,
@@ -63,15 +58,15 @@ app.post("/api/things", upload.single("img"), (req, res) => {
         thing.img = "images/" + req.file.filename;
     }
 
-    things.push(thing);
-    res.send(things);
+    createThing(thing, res);
 });
 
+const createThing = async (thing, res) => {
+    const result = await thing.save();
+    res.send(thing);
+}
+
 app.put("/api/things/:id", upload.single("img"), (req, res) => {
-    const id = parseInt(req.params.id);
-
-    const thing = things.find((r) => r._id === id);;
-
     const result = validateThing(req.body);
 
     if (result.error) {
@@ -79,34 +74,51 @@ app.put("/api/things/:id", upload.single("img"), (req, res) => {
         return;
     }
 
-    thing.name = req.body.name;
-    thing.inventor = req.body.inventor;
-    thing.inventionDate = req.body.inventionDate;
-    thing.description = req.body.description;
-    thing.funFacts = req.body.funFacts.split(",");
+    updateThing(req, res);
+});
 
-    if (req.file) {
-        thing.img = "images/" + req.file.filename;
+const updateThing = async (req, res) => {
+    let fieldsToUpdate = {
+        name: req.body.name,
+        inventor: req.body.inventor,
+        inventionDate: req.body.inventionDate,
+        description: req.body.description,
+        funFacts: req.body.funFacts.split(",")
+    };
+
+    if(req.file) {
+        fieldsToUpdate.img = "images/" + req.file.filename;
     }
 
+    const result = await Thing.updateOne({_id: req.params.id}, fieldsToUpdate);
+    const thing = await Thing.findById(req.params.id);
     res.send(thing);
-});
+};
+
+// app.delete("/api/things/:id", upload.single("img"), (req, res) => {
+//     const id = parseInt(req.params.id);
+
+//     const thing = things.find((t) => t._id === id);
+
+//     if (!thing) {
+//         res.status(404).send("The thing was not found");
+//         return;
+//     }
+
+//     const index = things.indexOf(thing);
+//     things.splice(index, 1);
+//     res.send(thing);
+
+// });
 
 app.delete("/api/things/:id", upload.single("img"), (req, res) => {
-    const id = parseInt(req.params.id);
+    removeThing(res, req.params.id);
+})
 
-    const thing = things.find((t) => t._id === id);
-
-    if (!thing) {
-        res.status(404).send("The thing was not found");
-        return;
-    }
-
-    const index = things.indexOf(thing);
-    things.splice(index, 1);
+const removeThing = async (res, id) => {
+    const thing = await Thing.findByIdAndDelete(id);
     res.send(thing);
-
-});
+}
 
 const validateThing = (thing) => {
     const schema = Joi.object({
