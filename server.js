@@ -17,6 +17,10 @@ mongoose
     })
     .catch((error) => console.log("Couldn't connect to mongodb", error));
 
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+});
+
 const thingSchema = new mongoose.Schema({
     // _id:mongoose.SchemaTypes.ObjectId,
     name:String,
@@ -61,10 +65,10 @@ app.post("/api/things", upload.single("img"), (req, res) => {
     createThing(thing, res);
 });
 
-const createThing = async (thing, res) => {
+const createThing = async (res, thing) => {
     const result = await thing.save();
     res.send(thing);
-}
+};
 
 app.put("/api/things/:id", upload.single("img"), (req, res) => {
     const result = validateThing(req.body);
@@ -95,22 +99,6 @@ const updateThing = async (req, res) => {
     res.send(thing);
 };
 
-// app.delete("/api/things/:id", upload.single("img"), (req, res) => {
-//     const id = parseInt(req.params.id);
-
-//     const thing = things.find((t) => t._id === id);
-
-//     if (!thing) {
-//         res.status(404).send("The thing was not found");
-//         return;
-//     }
-
-//     const index = things.indexOf(thing);
-//     things.splice(index, 1);
-//     res.send(thing);
-
-// });
-
 app.delete("/api/things/:id", upload.single("img"), (req, res) => {
     removeThing(res, req.params.id);
 })
@@ -133,6 +121,6 @@ const validateThing = (thing) => {
     return schema.validate(thing);
 };
 
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log("I'm listening");
 });
