@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 const upload = multer({ dest: __dirname + "/public/images" });
 
 mongoose
-    .connect("mongodb://localhost/things")
+    .connect("mongodb+srv://sgold242:YZjZdZ2Ipl637zGa@cluster0.sm07b42.mongodb.net/?retryWrites=true&w=majority")
     .then(() => {
         console.log("Connected to mongodb")
     })
@@ -69,6 +69,26 @@ const createThing = async (res, thing) => {
     const result = await thing.save();
     res.send(thing);
 };
+
+// const createThing = async () => {
+//     const thing = new Thing({
+//         name: "Hourglass",
+//         inventor: "Liutprand",
+//         inventionDate: "8th Century AD",
+//         description: "An hourglass is a device used to measure the passage of time through the use of sand flowing from the top to the bottom",
+//         img: 'images/hourglass.png',
+//         funFacts: [
+//             "The duration of time a given hourglass will last depends on the size and shape of the hourglass",
+//             "The hourglass was used for measuring time during ocean travel due to being unaffected by waves",
+//             "Ferdinand Magellan used 18 hourglasses during a trip around the globe, each turned by the ship's page in order to provide times for the ship's log",
+//         ],
+//     });
+
+//     const result = await thing.save();
+//     console.log(result);
+// };
+
+// createThing();
 
 app.put("/api/things/:id", upload.single("img"), (req, res) => {
     const result = validateThing(req.body);
