@@ -17,10 +17,6 @@ mongoose
     })
     .catch((error) => console.log("Couldn't connect to mongodb", error));
 
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
-});
-
 const thingSchema = new mongoose.Schema({
     // _id:mongoose.SchemaTypes.ObjectId,
     name:String,
@@ -33,6 +29,10 @@ const thingSchema = new mongoose.Schema({
 
 const Thing = mongoose.model("Thing", thingSchema);
 
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+});
+
 app.get("/api/things", (req, res) => {
     getThings(res);
 });
@@ -40,6 +40,15 @@ app.get("/api/things", (req, res) => {
 const getThings = async (res) => {
     const things = await Thing.find();
     res.send(things);
+}
+
+app.get("api/things:id", (req, res) => {
+    getThing(res, req.params.id);
+});
+
+const getThing = async(res, id) => {
+    const thing = await Thing.findOne({ _id: id});
+    res.send(thing);
 }
 
 app.post("/api/things", upload.single("img"), (req, res) => {
@@ -50,13 +59,13 @@ app.post("/api/things", upload.single("img"), (req, res) => {
         return;
     }
 
-    const thing = {
+    const thing = new Thing({
         name: req.body.name,
         inventor: req.body.inventor,
         inventionDate: req.body.inventionDate,
         description: req.body.description,
         funFacts: req.body.funFacts.split(",")
-    }
+    });
 
     if (req.file) {
         thing.img = "images/" + req.file.filename;
@@ -65,30 +74,10 @@ app.post("/api/things", upload.single("img"), (req, res) => {
     createThing(thing, res);
 });
 
-const createThing = async (res, thing) => {
+const createThing = async (thing, res) => {
     const result = await thing.save();
     res.send(thing);
 };
-
-// const createThing = async () => {
-//     const thing = new Thing({
-//         name: "Hourglass",
-//         inventor: "Liutprand",
-//         inventionDate: "8th Century AD",
-//         description: "An hourglass is a device used to measure the passage of time through the use of sand flowing from the top to the bottom",
-//         img: 'images/hourglass.png',
-//         funFacts: [
-//             "The duration of time a given hourglass will last depends on the size and shape of the hourglass",
-//             "The hourglass was used for measuring time during ocean travel due to being unaffected by waves",
-//             "Ferdinand Magellan used 18 hourglasses during a trip around the globe, each turned by the ship's page in order to provide times for the ship's log",
-//         ],
-//     });
-
-//     const result = await thing.save();
-//     console.log(result);
-// };
-
-// createThing();
 
 app.put("/api/things/:id", upload.single("img"), (req, res) => {
     const result = validateThing(req.body);
