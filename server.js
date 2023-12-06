@@ -18,13 +18,12 @@ mongoose
     .catch((error) => console.log("Couldn't connect to mongodb", error));
 
 const thingSchema = new mongoose.Schema({
-    // _id:mongoose.SchemaTypes.ObjectId,
     name:String,
     inventor:String,
     inventionDate:String,
     description:String,
     img:String,
-    funFacts:[String]
+    funFacts:[String],
 });
 
 const Thing = mongoose.model("Thing", thingSchema);
@@ -42,7 +41,7 @@ const getThings = async (res) => {
     res.send(things);
 }
 
-app.get("api/things:id", (req, res) => {
+app.get("/api/things:id", (req, res) => {
     getThing(res, req.params.id);
 });
 
@@ -64,7 +63,7 @@ app.post("/api/things", upload.single("img"), (req, res) => {
         inventor: req.body.inventor,
         inventionDate: req.body.inventionDate,
         description: req.body.description,
-        funFacts: req.body.funFacts.split(",")
+        funFacts: req.body.funFacts.split(","),
     });
 
     if (req.file) {
